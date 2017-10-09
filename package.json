@@ -1,0 +1,24 @@
+{
+  "name": "be-hackathon",
+  "version": "1.0.0",
+  "description": "Hackathon back-end",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xogne/BE-Hackathon.git"
+  },
+  "author": "Asier Zapata",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/xogne/BE-Hackathon/issues"
+  },
+  "homepage": "https://github.com/xogne/BE-Hackathon#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.1",
+    "mongoose": "^4.12.1"
+  }
+}
