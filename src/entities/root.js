@@ -1,4 +1,8 @@
-var MatchController = require('./match/match_controller');
+var MatchController = require('./match/matchController');
+
+/* ====================================================== */
+/*                         API                            */
+/* ====================================================== */
 
 var controllers = {
     '/match' : MatchController
