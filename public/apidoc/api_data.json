@@ -1,0 +1,303 @@
+[
+  {
+    "type": "delete",
+    "url": "/match/:id",
+    "title": "Delete match by id",
+    "group": "Matchs",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "confirmation",
+            "description": ""
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n  \"Match with id :id was deleted.\"",
+          "type": "Object"
+        }
+      ]
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl --request DELETE --url http://localhost/match/59dbbd5233f189109ccef175",
+        "type": "curl"
+      }
+    ],
+    "error": {
+      "examples": [
+        {
+          "title": "DB error:",
+          "content": "HTTP/1.1 500 Internal Server Error\n  \"There was a problem deleting the match.\"",
+          "type": "String"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/entities/match/matchModel.js",
+    "groupTitle": "Matchs",
+    "name": "DeleteMatchId"
+  },
+  {
+    "type": "get",
+    "url": "/match",
+    "title": "List of all matches",
+    "group": "Matchs",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "matches",
+            "description": "<p>Array of all matches</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl --request GET --url http://localhost/match/",
+        "type": "curl"
+      }
+    ],
+    "error": {
+      "examples": [
+        {
+          "title": "DB error:",
+          "content": "HTTP/1.1 500 Internal Server Error\n  \"There was a problem finding all matches.\"",
+          "type": "String"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/entities/match/matchModel.js",
+    "groupTitle": "Matchs",
+    "name": "GetMatch"
+  },
+  {
+    "type": "get",
+    "url": "/match/:id",
+    "title": "Obtain match by id",
+    "group": "Matchs",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "match",
+            "description": ""
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n[{\n  \"_id\": \"59dbbcf933f189109ccef174\",\n  \"game\": \"League of Legends\",\n  \"competition\": \"Worlds\",\n  \"__v\": 0,\n  \"time\": \"2017-10-09 20:16:25.754\",\n  \"teams\": [\n      \"LZ\",\n      \"GAM\"\n  ]\n}]",
+          "type": "Object"
+        }
+      ]
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl --request GET --url http://localhost/match/59dbbcf933f189109ccef174",
+        "type": "curl"
+      }
+    ],
+    "error": {
+      "examples": [
+        {
+          "title": "DB error:",
+          "content": "HTTP/1.1 500 Internal Server Error\n  \"There was a problem finding the match with id :id.\"",
+          "type": "String"
+        },
+        {
+          "title": "Match error:",
+          "content": "HTTP/1.1 404 Not Found\n  \"Match not found.\"",
+          "type": "String"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/entities/match/matchModel.js",
+    "groupTitle": "Matchs",
+    "name": "GetMatchId"
+  },
+  {
+    "type": "post",
+    "url": "/match",
+    "title": "Adds a new match",
+    "group": "Matchs",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String[]",
+            "optional": false,
+            "field": "teams",
+            "description": "<p>The teams of the match</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "time",
+            "description": "<p>The date in JS format</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "game",
+            "description": "<p>Game of this match</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "competition",
+            "description": "<p>League or tournament where this match will take place</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "match",
+            "description": "<p>The resultant object inserted in the db</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n[{\n  \"_id\": \"59dbbcf933f189109ccef174\",\n  \"game\": \"League of Legends\",\n  \"competition\": \"Worlds\",\n  \"__v\": 0,\n  \"time\": \"2017-10-09 20:16:25.754\",\n  \"teams\": [\n      \"LZ\",\n      \"GAM\"\n  ]\n}]",
+          "type": "Object"
+        }
+      ]
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl --request POST --url http://localhost/match/ --header 'content-type: application/x-www-form-urlencoded' --data 'teams=IMT&teams=FNC&game=League%20of%20Legends&competition=Worlds'",
+        "type": "curl"
+      }
+    ],
+    "error": {
+      "examples": [
+        {
+          "title": "DB error:",
+          "content": "HTTP/1.1 500 Internal Server Error\n  There was a problem adding this match.",
+          "type": "String"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/entities/match/matchModel.js",
+    "groupTitle": "Matchs",
+    "name": "PostMatch"
+  },
+  {
+    "type": "put",
+    "url": "/match/:id",
+    "title": "Update a match by id",
+    "group": "Matchs",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "match",
+            "description": "<p>New match object updated</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n  [{\n  \"_id\": \"59dbbcf933f189109ccef174\",\n  \"game\": \"League of Legends\",\n  \"competition\": \"Worlds\",\n  \"__v\": 0,\n  \"time\": \"2017-10-09 20:16:25.754\",\n  \"teams\": [\n      \"FNC\",\n      \"GAM\"\n  ]\n}]",
+          "type": "Object"
+        }
+      ]
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl --request PUT --url http://localhost/match/59dbbcf933f189109ccef174 --header 'content-type: application/x-www-form-urlencoded' --data 'teams=FNC&teams=GAM'",
+        "type": "curl"
+      }
+    ],
+    "error": {
+      "examples": [
+        {
+          "title": "DB error:",
+          "content": "HTTP/1.1 500 Internal Server Error\n  \"There was a problem deleting the match.\"",
+          "type": "String"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/entities/match/matchModel.js",
+    "groupTitle": "Matchs",
+    "name": "PutMatchId"
+  }
+]

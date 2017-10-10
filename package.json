@@ -4,7 +4,8 @@
   "description": "Hackathon back-end",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "bundle_api": "node src/utils/apiBuilder.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/xogne/BE-Hackathon#readme",
   "dependencies": {
+    "apidoc": "^0.17.6",
     "body-parser": "^1.18.2",
     "express": "^4.16.1",
     "mongoose": "^4.12.1"

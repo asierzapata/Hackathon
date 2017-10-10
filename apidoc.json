@@ -1,0 +1,8 @@
+{
+    "name": "BE-Hackathon API documentation",
+    "version": "1.0.0",
+    "description": "BackEnd API of Hackathon project",
+    "template": {
+        "forceLanguage": "en"
+    }
+}
