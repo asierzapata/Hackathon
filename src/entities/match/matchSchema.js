@@ -1,8 +1,11 @@
 var mongoose = require('mongoose');
 
 var MatchSchema = new mongoose.Schema({  
-  teams: [String],
-  time: { type: Date, default: Date.now },
+  teams: { type: [Object], max: 2 },
+  start_time: { type: Date, default: Date.now },
+  ended: { type: Boolean, default: false },
+  bet_net: [Object], 
+  winner: String,
   game: String,
   competition: String
 });

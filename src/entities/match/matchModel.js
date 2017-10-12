@@ -1,4 +1,5 @@
 var Match = require('./matchSchema');
+var MatchUtils = require('../../utils/domains/match/matchUtils');
 
 /* ====================================================== */
 /*                    Implementation                      */
@@ -33,12 +34,13 @@ var Match = require('./matchSchema');
  */
 
 const createMatch = function (req, res) {
-    console.log('Post at / of match_controller called');
+    const init_bets = MatchUtils.initBets();
     Match.create({
         teams: req.body.teams,
         time: req.body.time,
         game: req.body.game,
-        competition: req.body.competition
+        competition: req.body.competition,
+        bet_net: init_bets
     },
     function (err,match){
         if (err) return res.status(500).send("There was a problem adding this match.") 
@@ -58,8 +60,9 @@ const createMatch = function (req, res) {
  */
 const getAllMatches = function (req, res) {
     console.log('Get at / of match_controller called');    
-    Match.find({}, function (err,matches) {
+    Match.find({}).select({ teams: 1, start_time: 1, game: 1, competition: 1}).exec(function (err,matches) {
         if (err) return res.status(500).send("There was a problem finding all matches.") 
+        matches.bet_net = matches.bet_net.win_ratio;
         res.status(200).send(matches);
     });
 }
