@@ -11,7 +11,14 @@ var MatchModel = require('./matchModel');
 /*                       ROUTES                           */
 /* ====================================================== */
 
-router.post('/', MatchModel.createMatch);
+const createMatch = function (req,res) {
+    return MatchModel.createMatch(req.body)
+    .then(function(match){
+        return res.status(200).send(match);
+    }, function(err){
+        res.status(err.status).send(err.message);
+    })
+}
 
 router.get('/', MatchModel.getAllMatches);
 
@@ -20,5 +27,7 @@ router.get('/:id', MatchModel.getMatchById);
 router.delete('/:id', MatchModel.deleteMatch);
 
 router.put('/:id', MatchModel.updateMatch);
+
+
 
 module.exports = router;

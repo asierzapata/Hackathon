@@ -33,19 +33,24 @@ var MatchUtils = require('../../utils/domains/match/matchUtils');
  *      There was a problem adding this match.
  */
 
-const createMatch = function (req, res) {
-    const init_bets = MatchUtils.initBets();
-    Match.create({
-        teams: req.body.teams,
-        time: req.body.time,
-        game: req.body.game,
-        competition: req.body.competition,
-        bet_net: init_bets
-    },
-    function (err,match){
-        if (err) return res.status(500).send("There was a problem adding this match.") 
-        res.status(200).send(match);
-    });
+const createMatch = function (body) {
+    const init_bets = MatchUtils.initBets(body.teams[0], body.teams[1]);
+    return new Promise(function(resolve, reject){
+        Match.create({
+            teams: body.teams,
+            time: body.time,
+            game: body.game,
+            competition: body.competition,
+            bet_net: init_bets
+        },
+        function (err,match){
+            if (err) return reject({
+                status: 500,
+                message: "There was a problem adding this match."
+            }) 
+            resolve(match);
+        });
+    })
 }
 
 /**
