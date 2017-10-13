@@ -4,6 +4,7 @@ var GameRouter = require('./game/gameRouter');
 var TournamentRouter = require('./tournament/tournamentRouter');
 var SeriesRouter = require('./series/seriesRouter');
 var BetRouter = require('./bet/betRouter');
+var TeamRouter = require('./team/teamRouter');
 
 /* ====================================================== */
 /*                         API                            */
@@ -15,7 +16,8 @@ var Routers = {
     '/tournament' : TournamentRouter, 
     '/series' : SeriesRouter,
     '/match' : MatchRouter,
-    '/bet' : BetRouter
+    '/bet' : BetRouter,
+    '/team' : TeamRouter
 };
 
 module.exports = Routers;

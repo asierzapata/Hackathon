@@ -1,5 +1,6 @@
 var Match = require('./matchSchema');
 var MatchUtils = require('../../utils/domains/match/matchUtils');
+var _ = require('lodash');
 
 /* ====================================================== */
 /*                    Implementation                      */
@@ -33,14 +34,15 @@ var MatchUtils = require('../../utils/domains/match/matchUtils');
  *      There was a problem adding this match.
  */
 
-function createMatch(body) {
-    const init_bets = MatchUtils.initBets(body.teams[0], body.teams[1]);
+function createMatch(body,teams) {
+    const init_bets = MatchUtils.initBets(teams[0]._id, teams[1]._id);
     return new Promise(function(resolve, reject){
         Match.create({
-            teams: body.teams,
+            teams: teams,
             time: body.time,
             game: body.game,
-            competition: body.competition,
+            tournament: body.tournament,
+            series: body.series,
             bet_net: init_bets
         }, function (err,match){
             if (err) return reject({
@@ -53,10 +55,9 @@ function createMatch(body) {
 }
 
 
-function getMatchesByIdArray(body) {
+function getMatchesByIdArray(idArray) {
     return new Promise(function(resolve, reject) {
-        var obj_ids = body.idArray.map(function(id) { return ObjectId(id); });
-        Match.find( { _id: {$in: obj_ids} }, function(err, matches) {
+        Match.find( { _id: {$in: idArray} }, function(err, matches) {
             if (err) return reject({
                 status: 500,
                 message: "There was a problem finding the matches."
@@ -82,14 +83,8 @@ function getMatchesByIdArray(body) {
  */
 
 function getAllMatches() {
-    console.log('Get at / of match controller called');
     return new Promise (function(resolve, reject) {
-        Match.find({}).select({
-            teams: 1,
-            start_time: 1,
-            game: 1,
-            competition: 1
-        }.exec(function(err, matches) {
+        Match.find({},{"teams":1,"game":1,"start_time":1},function(err, matches) {
             if (err) return reject ({
                 status: 500,
                 message: "There was a problem finding all matches."
@@ -98,10 +93,16 @@ function getAllMatches() {
                 status: 404,
                 message: "Any matches found."
             });
-            matches.bet_net = matches.bet_net.win_ratio;
+            matches.forEach(function(element){
+                if(_.isObject(element.teams[0]) || _.isObject(element.teams[1])){
+                    element.teams.forEach(function(team){
+                        element.teams.push([team._id,team.acronym]);
+                    });
+                    element.teams = _.takeRight(element.teams, 2);
+                }
+            });         
             resolve(matches);
         })
-        );
     });
 }
 

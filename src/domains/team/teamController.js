@@ -27,12 +27,13 @@ function createTeam(req, res) {
 }
 
 function getTeamsByIdArray(req, res) {
-    return TeamModel.getTeamsByIdArray(req.body)
-    .then(function(teams) {
-        return res.status(200).send(teams);
-    }, function (err) {
-        return res.status(err.status).send(err.message);
-    })
+    var obj_ids = _.map( req.body.teams,function(id) { return ObjectId(id); });
+    return TeamModel.getTeamsByIdArray(obj_ids)
+        .then(function(teams) {
+            return res.status(200).send(teams);
+        }, function (err) {
+            return res.status(err.status).send(err.message);
+        })
 }
 
 function getAllTeams(req, res) {

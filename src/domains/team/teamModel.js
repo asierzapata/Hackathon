@@ -34,18 +34,11 @@ function createTeam(body) {
     });
 }
 
-function getTeamsByIdArray(body) {
+function getTeamsByIdArray(idArray) {
     return new Promise(function(resolve, reject) {
-        var obj_ids = body.idArray.map(function(id) { return ObjectId(id); });
-        Team.find( { _id: {$in: obj_ids} }, function(err, teams) {
-            if (err) return reject({
-                status: 500,
-                message: "No matching teams."
-            });
-            if (!teams) return reject({
-                status: 404,
-                message: "No teams found."
-            });
+        Team.find( { _id: {$in: idArray} }, function(err, teams) {
+            if (err) return reject({status: 500,message: "No matching teams."});
+            if (!teams) return reject({status: 404,message: "No teams found."});
             resolve(teams);
         });
     });
