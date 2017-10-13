@@ -3,7 +3,7 @@ var UserRouter = require('./user/userController');  // TODO Change to router whe
 var GameRouter = require('./game/gameRouter');
 var TournamentRouter = require('./tournament/tournamentRouter');
 var SeriesRouter = require('./series/seriesRouter');
-
+var BetRouter = require('./bet/betRouter');
 
 /* ====================================================== */
 /*                         API                            */
@@ -14,7 +14,8 @@ var Routers = {
     '/game' : GameRouter,
     '/tournament' : TournamentRouter, 
     '/series' : SeriesRouter,
-    '/match' : MatchRouter
+    '/match' : MatchRouter,
+    '/bet' : BetRouter
 };
 
 module.exports = Routers;
