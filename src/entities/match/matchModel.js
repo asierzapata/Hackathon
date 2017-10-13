@@ -63,12 +63,33 @@ const createMatch = function (body) {
  *    HTTP/1.1 500 Internal Server Error
  *      "There was a problem finding all matches."
  */
-const getAllMatches = function (req, res) {
+
+/*const getAllMatches = function (req, res) {
     console.log('Get at / of match_controller called');    
     Match.find({}).select({ teams: 1, start_time: 1, game: 1, competition: 1}).exec(function (err,matches) {
         if (err) return res.status(500).send("There was a problem finding all matches.") 
         matches.bet_net = matches.bet_net.win_ratio;
         res.status(200).send(matches);
+    });
+}*/
+
+const getAllMatches = function (body) {
+    console.log('Get at / of match controller called');
+    return new Promise (function(resolve,reject) {
+        Match.find({}).select({
+            teams: 1,
+            start_time: 1,
+            game: 1,
+            competition: 1
+        },
+        function(err, matches) {
+            if (err) return reject ({
+                status: 500,
+                message: "There was a problem finding all matches."
+            })
+            matches.bet_net = matches.bet_net.win_ratio;
+            resolve(matches);
+        });
     });
 }
 
@@ -104,6 +125,19 @@ const getMatchById = function (req, res) {
         if (err) return res.status(500).send("There was a problem finding the match with id "+req.params.id+".");
         if (!match) return res.status(404).send("Match not found.");
         res.status(200).send(match);
+    });
+}
+
+const getMatchById = function (params) {
+    return new Promise (function(resolve, reject) {
+        Match.findById(params.id){}
+    }, 
+    function(err, match) {
+        if (err) return reject ({
+            status: 500,
+            message: "There was a problem finding the match with id "+params.id+".";
+        })
+        resolve(match);
     });
 }
 
