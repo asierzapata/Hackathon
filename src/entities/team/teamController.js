@@ -54,7 +54,6 @@ function getTeamByAcronym(req, res) {
 }
 
 function getTeamById(req, res) {
-    console.log(req.params)
     return TeamModel.getTeamById(req.params.id)
         .then(function(team) {
             return res.status(200).send(team);
