@@ -33,7 +33,7 @@ var MatchUtils = require('../../utils/domains/match/matchUtils');
  *      There was a problem adding this match.
  */
 
-const createMatch = function (body) {
+function createMatch(body) {
     const init_bets = MatchUtils.initBets(body.teams[0], body.teams[1]);
     return new Promise(function(resolve, reject){
         Match.create({
@@ -42,15 +42,32 @@ const createMatch = function (body) {
             game: body.game,
             competition: body.competition,
             bet_net: init_bets
-        },
-        function (err,match){
+        }, function (err,match){
             if (err) return reject({
                 status: 500,
                 message: "There was a problem adding this match."
-            }) 
+            });
             resolve(match);
         });
     })
+}
+
+
+function getMatchesByIdArray(body) {
+    return new Promise(function(resolve, reject) {
+        var obj_ids = body.idArray.map(function(id) { return ObjectId(id); });
+        Match.find( { _id: {$in: obj_ids} }, function(err, matches) {
+            if (err) return reject({
+                status: 500,
+                message: "There was a problem finding the matches."
+            });
+            if (!matches) return reject({
+                status: 404,
+                message: "No matching matches."
+            });
+            resolve(matches);
+        });
+    });
 }
 
 /**
@@ -64,32 +81,27 @@ const createMatch = function (body) {
  *      "There was a problem finding all matches."
  */
 
-/*const getAllMatches = function (req, res) {
-    console.log('Get at / of match_controller called');    
-    Match.find({}).select({ teams: 1, start_time: 1, game: 1, competition: 1}).exec(function (err,matches) {
-        if (err) return res.status(500).send("There was a problem finding all matches.") 
-        matches.bet_net = matches.bet_net.win_ratio;
-        res.status(200).send(matches);
-    });
-}*/
-
-const getAllMatches = function (body) {
+function getAllMatches() {
     console.log('Get at / of match controller called');
-    return new Promise (function(resolve,reject) {
+    return new Promise (function(resolve, reject) {
         Match.find({}).select({
             teams: 1,
             start_time: 1,
             game: 1,
             competition: 1
-        },
-        function(err, matches) {
+        }.exec(function(err, matches) {
             if (err) return reject ({
                 status: 500,
                 message: "There was a problem finding all matches."
-            })
+            });
+            if (!matches) return reject ({
+                status: 404,
+                message: "Any matches found."
+            });
             matches.bet_net = matches.bet_net.win_ratio;
             resolve(matches);
-        });
+        })
+        );
     });
 }
 
@@ -120,24 +132,20 @@ const getAllMatches = function (body) {
  *    HTTP/1.1 404 Not Found
  *      "Match not found."
  */
-const getMatchById = function (req, res) {
-    Match.findById(req.params.id, function (err, match) {
-        if (err) return res.status(500).send("There was a problem finding the match with id "+req.params.id+".");
-        if (!match) return res.status(404).send("Match not found.");
-        res.status(200).send(match);
-    });
-}
 
-const getMatchById = function (params) {
-    return new Promise (function(resolve, reject) {
-        Match.findById(params.id){}
-    }, 
-    function(err, match) {
-        if (err) return reject ({
-            status: 500,
-            message: "There was a problem finding the match with id "+params.id+".";
+function getMatchById(params) {
+    return new Promise(function(resolve, reject) {
+        Match.findById(params.id, function(err, match) {
+            if (err) return reject ({
+                status: 500,
+                message: "There was a problem finding all matches."
+            });
+            if (!match) return reject ({
+                status: 404,
+                message: "Match not found."
+            });
+            resolve(match);
         })
-        resolve(match);
     });
 }
 
@@ -156,10 +164,19 @@ const getMatchById = function (params) {
  *      "There was a problem deleting the match."
  */
 
-const deleteMatch = function (req, res) {
-    Match.findByIdAndRemove(req.params.id, function (err, match) {
-        if (err) return res.status(500).send("There was a problem deleting the match.");
-        res.status(200).send("Match with id "+ req.params.id +" was deleted.");
+function deleteMatch(params) {
+    return new Promise(function(resolve, reject) {
+        Match.findByIdAndRemove(params.id, function (err, match) {
+            if (err) return reject({
+                status: 500,
+                message: "There was a problem deleting the match."
+            });
+            if (!match) return reject({
+                status: 404,
+                message: "No match found with that id."
+            })
+            resolve(match);
+        });
     });
 }
 
@@ -187,10 +204,20 @@ const deleteMatch = function (req, res) {
  *    HTTP/1.1 500 Internal Server Error
  *      "There was a problem deleting the match."
  */
-const updateMatch = function (req, res) {  
-    Match.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, match) {
-        if (err) return res.status(500).send("There was a problem updating the match.");
-        res.status(200).send(match);
+
+function updateMatch(params, body) {
+    return new Promise(function(resolve, reject) {
+        Match.findByIdAndUpdate(params.id, body, {new: true}, function(err, match) {
+            if (err) return reject({
+                status: 500,
+                message: "There was a problem updating this match."
+            });
+            if (!match) return reject({
+                status: 404,
+                message: "Match with that id not found."
+            });
+            resolve(match);
+        });
     });
 }
 
@@ -200,7 +227,8 @@ const updateMatch = function (req, res) {
 
 const matchModel = {
     'createMatch' : createMatch,
-    'getAllMatches' :  getAllMatches,
+    'getMatchesByIdArray' : getMatchesByIdArray,
+    'getAllMatches' : getAllMatches,
     'getMatchById' : getMatchById,
     'deleteMatch' : deleteMatch,
     'updateMatch' : updateMatch

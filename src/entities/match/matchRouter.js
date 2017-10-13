@@ -1,9 +1,9 @@
-// MatchController.js
+// matchRouter.js
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 
-router.use(bodyParser.urlencoded({ extended: true })); // Maybe change to JSON
+router.use(bodyParser.json());
 
 var MatchController = require('./matchController');
 
@@ -12,6 +12,8 @@ var MatchController = require('./matchController');
 /* ====================================================== */
 
 router.post('/', MatchController.createMatch);
+
+router.post('/bundle', MatchController.getMatchesByIdArray);
 
 router.get('/', MatchController.getAllMatches);
 
