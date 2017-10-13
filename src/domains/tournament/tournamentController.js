@@ -6,10 +6,12 @@ var TournamentModel = require('./TournamentModel');
 
 const api = {
     'getSeriesByTournamentId': getSeriesByTournamentId,
+    'getAllTournaments' : getAllTournaments,
     'createTournament': createTournament,
     'getTournamentById': getTournamentById,
     'deleteTournament': deleteTournament,
-    'updateTournament': updateTournament
+    'updateTournament': updateTournament,
+    'updateTournamentSeries': updateTournamentSeries
 }
 
 module.exports = api;
@@ -18,7 +20,7 @@ module.exports = api;
 /*                    Implementation                      */
 /* ====================================================== */
 
-const createTournament = function (req,res) {
+function createTournament(req,res) {
     return TournamentModel.createTournament(req.body)
         .then(function(tournament){
             return res.status(200).send(tournament);
@@ -27,16 +29,25 @@ const createTournament = function (req,res) {
         })
 }
 
-const getSeriesByTournamentId = function (req,res) {
-    return TournamentModel.getSeriesByTournamentId(req.params.id)
-        .then(function(series){
-            return res.status(200).send(series);
+function getAllTournaments(req,res){
+    return TournamentModel.getAllTournaments()
+        .then(function(tournaments){
+            return res.status(200).send(tournaments);
         }, function(err){
             res.status(err.status).send(err.message);
         })
 }
 
-const getTournamentById = function (req,res) {
+function getSeriesByTournamentId(req,res) {
+    return TournamentModel.getSeriesByTournamentId(req.params.id)
+        .then(function(Tournament){
+            return res.status(200).send(Tournament);
+        }, function(err){
+            res.status(err.status).send(err.message);
+        })
+}
+
+function getTournamentById(req,res) {
     return TournamentModel.getTournamentById(req.params.id)
         .then(function(tournament){
             return res.status(200).send(tournament);
@@ -45,7 +56,7 @@ const getTournamentById = function (req,res) {
         })
 }
 
-const deleteTournament = function (req,res) {
+function deleteTournament(req,res) {
     return TournamentModel.deleteTournament(req.params.id)
         .then(function(msg){
             return res.status(200).send(msg);
@@ -54,7 +65,7 @@ const deleteTournament = function (req,res) {
         })
 }
 
-const updateTournament = function (req,res) {
+function updateTournament(req,res) {
     return TournamentModel.updateTournament(req.params.id, req.body)
         .then(function(tournament){
             return res.status(200).send(tournament);
@@ -63,3 +74,12 @@ const updateTournament = function (req,res) {
         })
 }
 
+function updateTournamentSeries(req,res){
+    var series = (_.isArray(req.body.series)) ? req.body.series : [req.body.series];
+    return TournamentModel.updateTournamentSeries(req.params.id,series)
+        .then(function(tournament){
+            return res.status(200).send(tournament);            
+        },function(err){
+            res.status(err.status).send(err.message);            
+        })
+}

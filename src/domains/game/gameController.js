@@ -6,10 +6,12 @@ var GameModel = require('./gameModel');
 
 const api = {
     'getTournamentsByGameId': getTournamentsByGameId,
+    'getAllGames': getAllGames,
     'createGame': createGame,
     'getGameById': getGameById,
     'deleteGame': deleteGame,
-    'updateGame': updateGame
+    'updateGame': updateGame,
+    'updateGameTournaments': updateGameTournaments
 }
 
 module.exports = api;
@@ -18,7 +20,7 @@ module.exports = api;
 /*                    Implementation                      */
 /* ====================================================== */
 
-const createGame = function (req,res) {
+function createGame(req,res) {
     return GameModel.createGame(req.body)
         .then(function(game){
             return res.status(200).send(game);
@@ -27,7 +29,16 @@ const createGame = function (req,res) {
         })
 }
 
-const getTournamentsByGameId = function (req,res) {
+function getAllGames(req,res){
+    return GameModel.getAllGames()
+        .then(function(games){
+            return res.status(200).send(games)
+        }, function(err){
+            res.status(err.status).send(err.message);
+        })
+}
+
+function getTournamentsByGameId(req,res) {
     return GameModel.getTournamentsByGameId(req.params.id)
         .then(function(tournaments){
             return res.status(200).send(tournaments);
@@ -36,7 +47,7 @@ const getTournamentsByGameId = function (req,res) {
         })
 }
 
-const getGameById = function (req,res) {
+function getGameById(req,res) {
     return GameModel.getGameById(req.params.id)
         .then(function(game){
             return res.status(200).send(game);
@@ -45,7 +56,7 @@ const getGameById = function (req,res) {
         })
 }
 
-const deleteGame = function (req,res) {
+function deleteGame(req,res) {
     return GameModel.deleteGame(req.params.id)
         .then(function(msg){
             return res.status(200).send(msg);
@@ -54,12 +65,23 @@ const deleteGame = function (req,res) {
         })
 }
 
-const updateGame = function (req,res) {
+function updateGame(req,res) {
+    if(_.isArray(req.body)) res.status(400).send('Array not accepted as a type')
     return GameModel.updateGame(req.params.id, req.body)
         .then(function(game){
             return res.status(200).send(game);
         }, function(err){
             res.status(err.status).send(err.message);
+        })
+}
+
+function updateGameTournaments(req,res){
+    var tournaments = (_.isArray(req.body.tournaments)) ? req.body.tournaments : [req.body.tournaments];
+    return GameModel.updateGameTournaments(req.params.id,tournaments)
+        .then(function(game){
+            return res.status(200).send(game);            
+        },function(err){
+            res.status(err.status).send(err.message);            
         })
 }
 

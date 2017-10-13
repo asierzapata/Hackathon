@@ -11,14 +11,19 @@ var SeriesController = require('./seriesController');
 /*                       ROUTES                           */
 /* ====================================================== */
 
+router.get('/', SeriesController.getAllSeries);
+
 router.post('/', SeriesController.createSeries);
 
-router.get('/:id/matches', SeriesController.getMatchesBySeriesId); // Discuss how to implement (return id's or the entity?)
+router.get('/:id/matches', SeriesController.getMatchesBySeriesId); 
 
 router.get('/:id', SeriesController.getSeriesById);
 
 router.delete('/:id', SeriesController.deleteSeries);
 
 router.put('/:id', SeriesController.updateSeries);
+
+router.put('/:id/matches', SeriesController.updateSeriesMatches);
+
 
 module.exports = router;

@@ -1,4 +1,5 @@
 var Series = require('./SeriesSchema');
+var _ = require('lodash');
 
 /* ====================================================== */
 /*                         API                            */
@@ -6,15 +7,17 @@ var Series = require('./SeriesSchema');
 
 const api = {
     'getMatchesBySeriesId': getMatchesBySeriesId,
+    'getAllSeries': getAllSeries,    
     'createSeries': createSeries,
     'getSeriesById': getSeriesById,
     'deleteSeries': deleteSeries,
-    'updateSeries': updateSeries
+    'updateSeries': updateSeries,
+    'updateSeriesMatches' : updateSeriesMatches
 }
 
 module.exports = api;
 
-const createSeries = function(data){
+function createSeries(data){
     return new Promise(function(resolve, reject){
         Series.create({
             name: data.name,
@@ -23,7 +26,7 @@ const createSeries = function(data){
             start_time: data.start_time,
             end_time: data.end_time
         },
-     function (err, series) {
+        function (err, series) {
             if (err) return reject({
                 status: 500,
                 message: "There was a problem adding this Series."
@@ -33,7 +36,16 @@ const createSeries = function(data){
     });   
 }
 
-const getMatchesBySeriesId = function(id){
+function getAllSeries(){
+    return new Promise(function(resolve,reject){
+        Series.find({}, function (err, series) {
+            if (err) return reject({status: 500, message: "There was a problem creating the list of series."})
+            resolve(series);
+        });
+    });
+}
+
+function getMatchesBySeriesId(id){
     return new Promise(function(resolve,reject){
         Series.findById(id, function (err, series) {
             if (err) return reject({status: 500, message: "There was a problem finding the series with id "+id+"."})
@@ -43,7 +55,7 @@ const getMatchesBySeriesId = function(id){
     });
 }
 
-const getSeriesById = function(id){
+function getSeriesById(id){
     return new Promise(function(resolve,reject){
         Series.findById(id, function (err, series) {
             if (err) return reject({status: 500, message: "There was a problem finding the series with id "+id+"."})
@@ -53,7 +65,7 @@ const getSeriesById = function(id){
     });
 }
 
-const deleteSeries = function(id){
+function deleteSeries(id){
     return new Promise(function(resolve,reject){
         Series.findByIdAndRemove(id, function (err, series) {
             if (err) return reject({status: 500, message: "There was a problem deleting this series."})
@@ -62,11 +74,20 @@ const deleteSeries = function(id){
     });
 }
 
-const updateSeries = function(id,data){
+function updateSeries(id,data){
     return new Promise(function(resolve,reject){
         Series.findByIdAndUpdate(id, data, {new: true}, function (err, series) {
             if (err) return reject({status: 500, message: "There was a problem updating this series."})
             resolve(series);
+        });
+    });
+}
+
+function updateSeriesMatches(id,matchesArray){
+    return new Promise(function(resolve,reject){
+        Series.findByIdAndUpdate(id, {$addToSet : { matches : { $each : matchesArray }}}, function (err,series){
+            if (err) return reject({status: 500, message: "There was a problem updating this series."})
+            resolve(series); 
         });
     });
 }
