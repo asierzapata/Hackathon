@@ -1,13 +1,19 @@
-var MatchController = require('./match/matchController');
-var UserController = require('./user/userController');
+var MatchRouter = require('./match/matchController'); // TODO Change to router when pull is made
+var UserRouter = require('./user/userController');  // TODO Change to router when pull is made
+var GameRouter = require('./game/gameRouter');
+var TournamentRouter = require('./tournament/tournamentRouter');
+var SeriesRouter = require('./series/seriesRouter');
 
 /* ====================================================== */
 /*                         API                            */
 /* ====================================================== */
 
-var controllers = {
-    '/match' : MatchController,
-    '/user' : UserController
+var Routers = { 
+    '/user' : UserRouter,
+    '/game' : GameRouter,
+    '/tournament' : TournamentRouter, 
+    '/series' : SeriesRouter,
+    '/match' : MatchRouter
 };
 
-module.exports = controllers;
+module.exports = Routers;

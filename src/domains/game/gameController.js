@@ -55,7 +55,7 @@ const deleteGame = function (req,res) {
 }
 
 const updateGame = function (req,res) {
-    return GameModel.updateGame(req.body)
+    return GameModel.updateGame(req.params.id, req.body)
         .then(function(game){
             return res.status(200).send(game);
         }, function(err){

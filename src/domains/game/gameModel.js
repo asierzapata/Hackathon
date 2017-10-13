@@ -4,7 +4,7 @@ var Game = require('./gameSchema');
 /*                         API                            */
 /* ====================================================== */
 
-const api = {
+const GameModel = {
     'getTournamentsByGameId': getTournamentsByGameId,
     'createGame': createGame,
     'getGameById': getGameById,
@@ -12,12 +12,13 @@ const api = {
     'updateGame': updateGame
 }
 
-module.exports = api;
+module.exports = GameModel;
 
 const createGame = function(data){
-    Game.create({
-            name: body.name,
-            acronym: body.acronym
+    return new Promise(function(resolve, reject){
+        Game.create({
+            name: data.name,
+            acronym: data.acronym
         },
         function (err, game) {
             if (err) return reject({
@@ -26,6 +27,7 @@ const createGame = function(data){
             })
             resolve(game);
         });
+    });      
 }
 
 const getTournamentsByGameId = function(id){
@@ -57,9 +59,9 @@ const deleteGame = function(id){
     });
 }
 
-const updateGame = function(id){
+const updateGame = function(id,data){
     return new Promise(function(resolve,reject){
-        Game.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, game) {
+        Game.findByIdAndUpdate(id, data, {new: true}, function (err, game) {
             if (err) return reject({status: 500, message: "There was a problem updating this game."})
             resolve(game);
         });
