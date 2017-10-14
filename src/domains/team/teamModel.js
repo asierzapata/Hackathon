@@ -22,9 +22,14 @@ function createTeam(body) {
         Team.create({
             name: body.name,
             acronym: body.acronym,
-            region: body.region,
-            players: body.players
+            /*region: body.region,
+            players: body.players*/
         }, function (err, team) {
+            if (err && err.code === 11000) return reject({
+                status: 409,
+                message: "The team already exists."
+            });
+
             if (err) return reject({
                 status: 500,
                 message: "There was a problem adding this team."

@@ -20,7 +20,9 @@ function createTournament(data){
     return new Promise(function(resolve, reject){
         Tournament.create({
             name: data.name,
-            slug: data.slug
+            slug: data.slug,
+            series: data.series,
+            game_slug: data.game_slug
         },
      function (err, tournament) {
             if (err) return reject({

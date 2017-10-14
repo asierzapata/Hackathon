@@ -1,4 +1,8 @@
 var PopulateApiModel = require('./populateApiModel');
+var equivalences = require('../../parser/league-of-legends/leagueEquiv.json');
+var parser = require('../../parser/league-of-legends/parser');
+var getter = require('../../utils/externalApis/league-of-legends/jsonGetter');
+var _ = require('lodash')
 
 /* ====================================================== */
 /*                         API                            */
@@ -11,7 +15,8 @@ const populateApiController = {
     'getApiLinkByName' : getApiLinkByName, 
     'getAllApiLinks' :  getAllApiLinks,
     'deleteApiLink' : deleteApiLink,
-    'updateApiLink' : updateApiLink
+    'updateApiLink' : updateApiLink,
+    'populateTournament' : populateTournament
 }
 
 module.exports = populateApiController;
@@ -70,6 +75,15 @@ function updateApiLink(req,res) {
         .then(function(apiLinks){
             return res.status(200).send(apiLinks);
         }, function(err){
+            res.status(err.status).send(err.message);
+        })
+}
+
+function populateTournament(req,res) {
+    return PopulateApiModel.populateTournament(req.params.name,_.get(equivalences,req.params.name),parser,getter)
+        .then(function(tournament){
+            return res.status(200).send(tournament);
+        },function(err){
             res.status(err.status).send(err.message);
         })
 }

@@ -6,7 +6,8 @@ var TournamentSchema = new mongoose.Schema({
     logo: String,
     start_time: Date,
     end_time: Date,
-    series: [String]
+    series: [String],
+    game_slug: {type: String, unique: true }
 });
 
 mongoose.model('Tournament', TournamentSchema);

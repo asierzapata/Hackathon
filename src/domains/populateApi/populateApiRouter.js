@@ -23,4 +23,6 @@ router.delete('/:id', PopulateApiController.deleteApiLink);
 
 router.put('/:id', PopulateApiController.updateApiLink);
 
+router.get('/tournament/:name', PopulateApiController.populateTournament);
+
 module.exports = router;

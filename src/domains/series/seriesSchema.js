@@ -6,7 +6,8 @@ var SeriesSchema = new mongoose.Schema({
     place: String,
     start_time: Date,
     end_time: Date,
-    matches: [String]
+    matches: [String],
+    matches_type : String
 });
 
 mongoose.model('Series', SeriesSchema);
