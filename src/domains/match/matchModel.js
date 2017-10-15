@@ -38,12 +38,14 @@ function createMatch(body,teams) {
     const init_bets = MatchUtils.initBets(teams[0]._id, teams[1]._id);
     return new Promise(function(resolve, reject){
         Match.create({
+            name: body.name,
             teams: teams,
             time: body.time,
             game: body.game,
-            tournament: body.tournament,
-            series: body.series,
-            bet_net: init_bets
+            /*tournament: body.tournament,
+            series: body.series,*/
+            bet_net: init_bets,
+            series_slug: body.series_slug
         }, function (err,match){
             if (err) return reject({
                 status: 500,

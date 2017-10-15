@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 
-var MatchSchema = new mongoose.Schema({  
+var MatchSchema = new mongoose.Schema({
+  name: String,  
   teams: [],
   start_time: { type: Date, default: Date.now },
   ended: { type: Boolean, default: false },
@@ -8,7 +9,8 @@ var MatchSchema = new mongoose.Schema({
   winner: String,
   game: String,
   competition: String,
-  id_match_history: String
+  match_history: Object,
+  series_slug: String
 });
 
 mongoose.model('Match', MatchSchema);

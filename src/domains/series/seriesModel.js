@@ -22,9 +22,11 @@ function createSeries(data){
         Series.create({
             name: data.name,
             slug: data.slug,
-            place: data.place,
+            /*place: data.place,
             start_time: data.start_time,
-            end_time: data.end_time
+            end_time: data.end_time*/
+            matches : data.matches,
+            matches_type : data.matches_type
         },
         function (err, series) {
             if (err) return reject({
