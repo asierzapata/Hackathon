@@ -13,6 +13,6 @@ https.listen(443, function(){
     console.log('listening on *:443');
 });*/
 
-http.listen(8000, function(){ // Prod change to 80
-    console.log('listening on *:80');
+http.listen(8000, function(){ // Prod change to 8000
+    console.log('listening on *:8000');
 });
